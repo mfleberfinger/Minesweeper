@@ -1,0 +1,22 @@
+179 	B3 	10110011 	- 	│ 	 vertical line
+
+180 	B4 	10110100 	- 	┤ 	 right side, internal
+
+195 	C3 	11000011 	- 	├ 	 left side, internal
+
+191 	BF 	10111111 	- 	┐ 	 top right corner
+
+192 	C0 	11000000 	- 	└ 	 bottom left corner
+
+193 	C1 	11000001 	- 	┴ 	 bottom, internal
+
+194 	C2 	11000010 	- 	┬ 	 top, internal
+
+196 	C4 	11000100 	- 	─ 	 horizontal line
+
+197 	C5 	11000101 	- 	┼ 	 internal, internal
+
+217 	D9 	11011001 	- 	┘ 	bottom right corner
+
+218 	DA 	11011010 	- 	┌	top left corner
+

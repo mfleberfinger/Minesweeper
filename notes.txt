@@ -1,0 +1,224 @@
+TODO:
+	
+	See "Tile Types" below.
+	Design the UI class.
+	Write the UI class.
+	Test the game.
+________________________________________________________________________________
+UI and game logic will be separate.
+
+Write game logic functions first, then worry about UI.
+	- Game logic can be controlled through the debugger for testing if needed.
+
+public class Game:
+
+	High level operations:
+
+		NewGame(int mines, int x, int y)
+			- mines: number of mines
+			- x: horizontal size of board
+			- y: vertical size of board
+			- Throw an exception if mines > x * y. UI code should not allow this to
+				occur.
+			- This function will reset all of the game logic and start a new game
+				according to the given parameters.
+		
+		GameOver(bool win)
+			- win: True if the player has won, false if the player has lost.
+			- End the game in a win or a loss. Set the inProgress property to
+				false and set the win property as appropriate.
+			- Run any other necessary end of game logic.
+				
+		int RevealTile(int x, int y)
+			- x: x-coordinate
+			- y: y-coordinate
+			- returns: Return -1 if the tile is a mine. Otherwise, return the number
+				of adjacent mines.
+			- Reveals a tile. Returns the number of adjacent mines or -1 if a mine
+				was hit so the UI can respond appropriately.
+			- Don't worry about automatically revealing tiles adjacent to a 0.
+				Let the player deal with that (theoretical future enhancement).
+				
+		public int GetCell(int x, int y)
+			- x: x-coordinate
+			- y: y-coordinate
+			- Returns: The number of adjacent mines or -1 if (x,y) is a mine.
+			- Get a tile's status without making any changes to the game's state.
+			- For use by the UI.
+				
+	Data:
+		
+		private int[][] gameBoard
+			- The minesweeper game board. Each cell is either -1 to represent a mine
+				or the number of mines adjacent to the cell.
+				
+		private int hiddenSafeTiles
+			- The number of tiles that do not contain mines and have not been
+				uncovered. When this reaches 0, the game is won.
+				
+		public int X { get; private set; }
+			- The x dimension of the board.
+			
+		public int Y { get; private set; }
+			- The y dimension of the board.
+			
+		public int mines { get; private set; }
+			- The total number of mines on the board.
+
+		public bool inProgress { get; private set; }
+			- True if game is in progress. False otherwise.
+		
+		public bool win { get; private set; }
+			- True if the player has won. False otherwise.
+			- If !inProgress && win, player has won.
+			- If !inProgress && !win, player has lost.
+			- If inProgress, this property is not meaningful. Possibly throw an
+				exception if the getter is used when inProgress == true.
+
+
+
+
+
+How to place the mines?
+	
+	- Loop n times where n is the number of mines.
+	- Generate a pair of random numbers within the horizontal and vertical size
+		of the board for each mine. If the space is already filled, generate a
+		new pair. Repeat until the space is filled.
+		+ Problem: This could become very slow with a large board where most of
+			the tiles contain mines. For an extreme example, imagine what
+			happens if a 10,000 x 10,000 tile board has 99,999,999 mines. This
+			isn't a reasonable size for a minesweeper game board but the approach
+			doesn't scale.
+			-> Mitigation: If (rows * columns) / 2 < (number of mines), then
+				reverse the process from above by randomly selecting the spaces
+				to leave empty, rather than the spaces in which to place mines.
+
+
+
+
+
+
+
+
+public class UI:
+
+	Don't worry about automatically revealing tiles adjacent to a 0.
+		Let the player deal with that (theoretical future enhancement).
+		
+	
+	High level operations:
+	
+		InterpretCommand(string input)
+			- Take a command as an argument and decide what the user wants to do.
+			- Handle erroneous user input.
+			
+		GameOver()
+			- Do end of game output.			
+				
+		User commands:
+		
+			ShowHelp()
+				- List the commands for the user.
+		
+			NewGame()
+				- Start a new game.
+			
+			RevealTile(int x, int y)
+				- Call Game.RevealTile() and reveal the tile at (x,y) for the
+					player.
+			
+			FlagMine(int x, int y)
+				- x: x-coordinate
+				- y: y-coordinate
+				- Mark (x,y) as a mine.
+			
+			
+		DisplayBoard()
+			- Display the count of remaining mines.
+			- Show the user the gameboard. Display tiles as hidden or revealed
+				as appropriate.
+
+			Remaining Mines: 10
+
+			
+			Tile types:
+				- This may not be a useful abstraction. The gameboard will
+					probably need to be printed in rows.
+				
+				Top Left Corner:
+					
+					┌───┬
+					│   │
+					├───┼
+					
+				Top Right Corner:
+					
+					┬───┐
+					│   │
+					┼───┤
+					
+				Bottom Right Corner:
+					
+					┼───┤
+					│   │
+					┴───┘
+					
+				Bottom Left Corner:
+					
+					├───┼
+					│   │
+					└───┴
+					
+				Top Inner Edge:
+				
+					┬───┬
+					│   │
+					┼───┼
+				
+				Bottom Inner Edge:
+					
+					┼───┼
+					│   │
+					┴───┴
+				
+				Inner Left Edge:
+				
+					├───┼
+					│   │
+					├───┼
+					
+				Inner Right Edge:
+				
+					┼───┤
+					│   │
+					┼───┤
+
+				Degenerate Tiles:
+					
+					1 x 1 Game Single Tile:
+					
+						┌───┐
+						│   │
+						└───┘
+					
+					2 x 1 Game Left Side Tile:
+					
+						┌───┬
+						│   │
+						└───┴
+					
+					2 x 1 Game Right Side Tile:
+					
+						┬───┐
+						│   │
+						┴───┘
+						
+					2 x 1 Game Inner Tile:
+					
+						┬───┬
+						│   │
+						┴───┴
+
+					...There are several more... Just disallow x < 2 and y < 2.
+						Supporting weird, degenerate boards isn't worth the effort.

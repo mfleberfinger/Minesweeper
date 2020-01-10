@@ -1,0 +1,55 @@
+176 	B0 	10110000 	- 	░
+177 	B1 	10110001 	- 	▒ 	 
+178 	B2 	10110010 	- 	▓ 	 
+179 	B3 	10110011 	- 	│ 	 vertical line
+180 	B4 	10110100 	- 	┤ 	 right side, internal
+181 	B5 	10110101 	- 	╡ 	 
+182 	B6 	10110110 	- 	╢ 	 
+183 	B7 	10110111 	- 	╖ 	 
+184 	B8 	10111000 	- 	╕ 	 
+185 	B9 	10111001 	- 	╣ 	 
+186 	BA 	10111010 	- 	║ 	 
+187 	BB 	10111011 	- 	╗ 	 
+188 	BC 	10111100 	- 	╝ 	 
+189 	BD 	10111101 	- 	╜ 	 
+190 	BE 	10111110 	- 	╛ 	 
+191 	BF 	10111111 	- 	┐ 	 top right corner
+192 	C0 	11000000 	- 	└ 	 bottom left corner
+193 	C1 	11000001 	- 	┴ 	 bottom, internal
+194 	C2 	11000010 	- 	┬ 	 top, internal
+195 	C3 	11000011 	- 	├ 	 left side, internal
+196 	C4 	11000100 	- 	─ 	 horizontal line
+197 	C5 	11000101 	- 	┼ 	 internal, internal
+198 	C6 	11000110 	- 	╞ 	 
+199 	C7 	11000111 	- 	╟ 	 
+200 	C8 	11001000 	- 	╚ 	 
+201 	C9 	11001001 	- 	╔ 	 
+202 	CA 	11001010 	- 	╩ 	 
+203 	CB 	11001011 	- 	╦ 	 
+204 	CC 	11001100 	- 	╠ 	 
+205 	CD 	11001101 	- 	═ 	 
+206 	CE 	11001110 	- 	╬ 	 
+207 	CF 	11001111 	- 	╧ 	 
+208 	D0 	11010000 	- 	╨ 	 
+209 	D1 	11010001 	- 	╤ 	 
+210 	D2 	11010010 	- 	╥ 	 
+211 	D3 	11010011 	- 	╙ 	 
+212 	D4 	11010100 	- 	╘ 	 
+213 	D5 	11010101 	- 	╒ 	 
+214 	D6 	11010110 	- 	╓ 	 
+215 	D7 	11010111 	- 	╫ 	 
+216 	D8 	11011000 	- 	╪ 	 
+217 	D9 	11011001 	- 	┘ 	bottom right corner
+218 	DA 	11011010 	- 	┌	top left corner
+
+
+
+180 	B4 	10110100 	- 	┤ 	 right side, internal
+191 	BF 	10111111 	- 	┐ 	 top right corner
+192 	C0 	11000000 	- 	└ 	 bottom left corner
+193 	C1 	11000001 	- 	┴ 	 bottom, internal
+194 	C2 	11000010 	- 	┬ 	 top, internal
+195 	C3 	11000011 	- 	├ 	 left side, internal
+197 	C5 	11000101 	- 	┼ 	 internal, internal
+217 	D9 	11011001 	- 	┘ 	bottom right corner
+218 	DA 	11011010 	- 	┌	top left corner
