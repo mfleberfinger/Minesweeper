@@ -70,16 +70,15 @@ namespace Minesweeper
 		/// <remarks>Mines > x * y is invalid.</remarks>
 		private void SetUpGameBoard(int mines, int x, int y)
 		{
+			if (x < 1)
+				throw new ArgumentException("The x dimension of a gameboard must" +
+					" be greater than 0.", "x");
+			if (y < 1)
+				throw new ArgumentException("The y dimension of a gameboard must" +
+					" be greater than 0.", "y");
 			if (mines > x * y)
 				throw new ArgumentException(String.Format("It is not possible to " +
 					"have {0} * {1} = {2} tiles and {3} mines.", x, y, x * y, mines));
-			// Supporting weird, degenerate boards isn't worth the effort.
-			if (x < 2)
-				throw new ArgumentException("The x dimension of a gameboard must" +
-					" be greater than 2.", "x");
-			if (y < 2)
-				throw new ArgumentException("The y dimension of a gameboard must" +
-					" be greater than 2.", "y");
 			
 			Random rand = new Random();
 			int randX, randY;
