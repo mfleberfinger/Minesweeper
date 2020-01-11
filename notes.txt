@@ -135,13 +135,67 @@ public class UI:
 			
 			
 		DisplayBoard()
-			- Display the count of remaining mines.
+			- Display the count of remaining (unmarked) mines.
 			- Show the user the gameboard. Display tiles as hidden or revealed
 				as appropriate.
+			- How to draw the board?
+				+ Use the "tile type" abstraction to populate a 2D array of characters?
+					-> Each revealed tile would just be filled in by overwriting
+						one cell in the array.
+					-> Printing would be done by just iterating over the array.
+					-> This array would need to store x * y * 15 elements because
+						each tile is represented by 15 characters. This would be
+						considered highly memory intensive on a computer from
+						1980 with a 100 x 100 board but is probably trivial on
+						modern hardware without using extremely large gameboards.
+				+ Use a function to draw the board each time it needs to be updated. [using this approach]
+					-> Iterate from left edge/corner to right edge/corner, then
+						go to the next row. With 0-indexing, every odd-numbered
+						row is a space that may hold a number or a mine flag.
+						The columns that may hold numbers start from index 2 and
+						appear every 4 indices (e.g. columns 2, 6, 10, 14, and
+						18 would all hold spaces for numbers or mine flags.
+						
+			DrawBoard(bool lose)
+				- Output the gameboard to the console as ascii art.
+				- If lose == true, output all tiles regardless of whether they
+					were revealed. Otherwise, only output information for
+					revealed tiles.
+				- Iterate from left edge/corner to right edge/corner, then
+					go to the next row. With 0-indexing, every odd-numbered
+					row is a space that may hold a number or a mine flag.
+					The columns that may hold numbers start from index 2 and
+					appear every 4 indices (e.g. columns 2, 6, 10, 14, and
+					18 would all hold spaces for numbers or mine flags.
 
-			Remaining Mines: 10
 
+			Remaining Mines: 8
 			
+				  1   2   3   4   5   6   7   8   9  10
+				┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+			  1 │   │   │   │   │   │   │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  2 │   │   │   │   │   │   │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  3 │   │   │   │   │   │   │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  4 │   │   │   │   │   │   │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  5 │   │   │ 1 │ 1 │ 1 │   │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  6 │   │   │ 1 │ X │ 2 │ 1 │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  7 │   │   │ 1 │ 2 │ X │ 1 │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  8 │   │   │   │ 1 │ 1 │ 1 │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			  9 │   │   │   │   │   │   │   │   │   │   │
+				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+			 10 │   │   │   │   │   │   │   │   │   │   │
+				└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+			
+
+
 			Tile types:
 				- This may not be a useful abstraction. The gameboard will
 					probably need to be printed in rows.
@@ -194,6 +248,8 @@ public class UI:
 					│   │
 					┼───┤
 
+
+
 				Degenerate Tiles:
 					
 					1 x 1 Game Single Tile:
@@ -222,3 +278,12 @@ public class UI:
 
 					...There are several more... Just disallow x < 2 and y < 2.
 						Supporting weird, degenerate boards isn't worth the effort.
+						
+	Data:
+	
+		private Game game;
+			- Reference to a game object.
+			- This will be provided through a constructor by the code that
+				instantiates the UI object.
+		
+		
