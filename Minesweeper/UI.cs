@@ -23,11 +23,53 @@ namespace Minesweeper
 		/// <param name="lose">If <c>true</c>, output all tiles regardless of
 		/// whether they were revealed. Otherwise, only output information for
 		/// revealed tiles.</param>
+		/// <remarks>
+		/// An example of the ascii art gameboard is below:
+		/// 
+		///        1   2   3   4   5   6   7   8   9  10
+		///		┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+		///	  1 │   │   │   │   │   │   │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  2 │   │   │   │   │   │   │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  3 │   │   │   │   │   │   │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  4 │   │   │   │   │   │   │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  5 │   │   │ 1 │ 1 │ 1 │   │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  6 │   │   │ 1 │ X │ 2 │ 1 │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  7 │   │   │ 1 │ 2 │ X │ 1 │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  8 │   │   │   │ 1 │ 1 │ 1 │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	  9 │   │   │   │   │   │   │   │   │   │   │
+		///		├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+		///	 10 │   │   │   │   │   │   │   │   │   │   │
+		///		└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+		/// </remarks>
 		private void DrawBoard(bool lose)
 		{
+			// First, output the column numbers.
+			Console.Write("     ");
+			for (int i = 1; i <= game.X; i++)
+			{
+				// Align the number with the top of the cell.
+				if (i < 9)
+					Console.Write("   ");
+				else if (i < 100)
+					Console.Write("  ");
+				else
+					Console.Write(" ");
+				
+				Console.Write(i);
+			}
+
+			// Build the board left to right, top to bottom.
+
 			
 		}
-
 
 
 		public void MockupGameBoards()

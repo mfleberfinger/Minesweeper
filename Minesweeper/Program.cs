@@ -11,7 +11,7 @@ namespace Minesweeper
 		static void Main(string[] args)
 		{
 			Game game = new Game();
-			UI ui = new UI();
+			UI ui = new UI(game);
 
 			game.NewGame(10, 10, 10);
 			ui.MockupGameBoards();

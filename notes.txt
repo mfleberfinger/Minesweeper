@@ -1,6 +1,7 @@
 TODO:
+
+	Implement DrawBoard().
 	
-	See "Tile Types" below.
 	Design the UI class.
 	Write the UI class.
 	Test the game.
@@ -139,7 +140,8 @@ public class UI:
 			- Show the user the gameboard. Display tiles as hidden or revealed
 				as appropriate.
 			- How to draw the board?
-				+ Use the "tile type" abstraction to populate a 2D array of characters?
+				+ Use the "tile type" abstraction to populate a 2D array of
+					characters?
 					-> Each revealed tile would just be filled in by overwriting
 						one cell in the array.
 					-> Printing would be done by just iterating over the array.
@@ -148,7 +150,8 @@ public class UI:
 						considered highly memory intensive on a computer from
 						1980 with a 100 x 100 board but is probably trivial on
 						modern hardware without using extremely large gameboards.
-				+ Use a function to draw the board each time it needs to be updated. [using this approach]
+				+ Use a function to draw the board each time it needs to be updated.
+					[using this approach]
 					-> Iterate from left edge/corner to right edge/corner, then
 						go to the next row. With 0-indexing, every odd-numbered
 						row is a space that may hold a number or a mine flag.
@@ -171,7 +174,7 @@ public class UI:
 
 			Remaining Mines: 8
 			
-				  1   2   3   4   5   6   7   8   9  10
+				   1   2   3   4   5   6   7   8   9  10
 				┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
 			  1 │   │   │   │   │   │   │   │   │   │   │
 				├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
