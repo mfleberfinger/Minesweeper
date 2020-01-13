@@ -211,7 +211,7 @@ namespace Minesweeper
 		/// <param name="y">y-coordinate</param>
 		/// <param name="adjacentMines">The number of adjacent mines if the tile
 		/// is safe or -1 if (x,y) is a mine.</param>
-		/// <returns><c>true</c> if the tile is revealred, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if the tile is revealed, <c>false</c> otherwise.</returns>
 		public bool GetCellInfo(int x, int y, out int adjacentMines)
 		{
 			adjacentMines = gameBoard[x][y];
