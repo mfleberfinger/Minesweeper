@@ -12,14 +12,18 @@ namespace Minesweeper
 		{
 			Game game = new Game();
 			UI ui = new UI(game);
+			string input = "";
 
-			game.NewGame(10, 10, 10);
-			ui.MockupGameBoards();
-
-
+			Console.WriteLine("~~~ Minesweeper ~~~");
+			Console.WriteLine();
+			ui.InterpretCommand("help");
 			while (true)
 			{
-				// meh
+				Console.WriteLine();
+				Console.Write("> ");
+				input = Console.ReadLine();
+				Console.WriteLine();
+				ui.InterpretCommand(input);
 			}
 		}
 	}

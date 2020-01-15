@@ -26,22 +26,27 @@ namespace Minesweeper
 		public void InterpretCommand(string userInput)
 		{
 			string input = userInput.Trim().ToLower();
-			string commandName = Regex.Match(input, "^.* ").Value;
+			string commandName = Regex.Match(input, "^[^\\s]*").Value;
 
 			switch (commandName)
 			{
 				case "help":
+					ShowHelp(input);
 					break;
 				case "new":
+					NewGame(input);
 					break;
 				case "reveal":
+					RevealTile(input);
 					break;
 				case "flag":
+					FlagMine(input);
 					break;
 				case "unflag":
+					UnflagMine(input);
 					break;
 				default:
-					// error
+					Console.WriteLine("Command not recognized.");
 					break;
 			}
 		}
@@ -52,9 +57,14 @@ namespace Minesweeper
 		/// <param name="x">zero-indexed x-coordinate</param>
 		/// <param name="y">zero-indexed y-coordinate</param>
 		/// <returns></returns>
-		private bool IsValid(int x, int y)
+		private bool IsTile(int x, int y)
 		{
 			return x >= 0 && y >= 0 && x < game.X && y < game.Y;
+		}
+
+		private void DisplayArgumentError()
+		{
+			Console.WriteLine("Invalid argument(s).");
 		}
 
 
@@ -64,7 +74,9 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void FlagMine(string input)
 		{
-			
+			// Get the arguments. The calling function has already verified that
+			//	this is the flag command.
+
 		}
 		/// <summary>
 		/// Flag (x, y) as a mine.
@@ -78,7 +90,7 @@ namespace Minesweeper
 			int realX = x - 1;
 			int realY = y - 1;
 
-			if (IsValid(realX, realY))
+			if (IsTile(realX, realY))
 				flags[realX][realY] = true;
 		}
 
@@ -130,7 +142,36 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void NewGame(string input)
 		{
+			string strMines = "";
+			string strX = "";
+			string strY = "";
+			int mines = 0;
+			int x = 0;
+			int y = 0;
+			GroupCollection arguments = null;
+			bool parsed = false;
 
+			// Capture the three arguments, assuming the command is formatted
+			// like "new 5 10 20".
+			arguments = Regex.Match(input, "^\\w+ (\\d+) (\\d+) (\\d+)$").Groups;
+
+			// Apparently, C# defines the first group as the result of the
+			// entire regular expression...
+			parsed = arguments.Count == 4;
+			if (parsed)
+			{
+				parsed = parsed && int.TryParse(arguments[1].Value, out mines);
+				parsed = parsed && int.TryParse(arguments[2].Value, out x);
+				parsed = parsed && int.TryParse(arguments[3].Value, out y);
+			}
+
+			if (parsed && mines > -1 && x > 0 && y > 0)
+			{
+				NewGame(mines, x, y);
+				DrawBoard(false);
+			}
+			else
+				DisplayArgumentError();
 		}
 		/// <summary>
 		/// Start a new game.
@@ -140,7 +181,11 @@ namespace Minesweeper
 		/// <param name="y">vertical size in tiles</param>
 		private void NewGame(int mines, int x, int y)
 		{
-
+			flags = new bool[x][];
+			for (int i = 0; i < x; i++)
+				flags[i] = new bool[y];
+			
+			game.NewGame(mines, x, y);
 		}
 
 		/// <summary>
@@ -149,14 +194,20 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void ShowHelp(string input)
 		{
-
+			ShowHelp();
 		}
 		/// <summary>
 		/// Display the commands and their explanations.
 		/// </summary>
 		private void ShowHelp()
 		{
-
+			Console.WriteLine("Commands:");
+			Console.WriteLine("\thelp");
+			Console.WriteLine("\tnew (number of mines) (number of rows)" +
+				" (number of columns)");
+			Console.WriteLine("\treveal (column) (row)");
+			Console.WriteLine("\tflag (column) (row)");
+			Console.WriteLine("\tunflag (column) (row)");
 		}
 
 		/// <summary>
