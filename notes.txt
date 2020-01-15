@@ -1,7 +1,5 @@
 TODO:
 
-	Implement DrawBoard().
-	
 	Design the UI class.
 	Write the UI class.
 	Test the game.
@@ -112,27 +110,59 @@ public class UI:
 	
 		InterpretCommand(string input)
 			- Take a command as an argument and decide what the user wants to do.
-			- Handle erroneous user input.
+			- Trim spaces off of the beginning and end of a command.
+			- Use a regex and a switch statement to determine which command is
+				being used.
+				+ Call an overload for each command that will just accept the
+					input string.
 			
-		GameOver()
-			- Do end of game output.			
+				
 				
 		User commands:
+			- Handle invalid argument types and nonexistent commands.
+				+ Use an overload that only takes a string to parse commands and
+					call each implmentation.
+			- Handle errors in properly formed commands (e.g. out of bounds errors).
+			- Ignore commands passed at the wrong time (e.g. ignore RevealTile
+				commands when the game has been lost or has not been started).
+			
 		
-			ShowHelp()
+			ShowHelp(): "help"
 				- List the commands for the user.
 		
-			NewGame()
+			NewGame(int mines, int x, int y): "new"
+				- mines: number of mines to put on the board
+				- x: horizontal size in tiles
+				- y: vertical size in tiles
 				- Start a new game.
+				
 			
-			RevealTile(int x, int y)
+			RevealTile(int x, int y): "reveal"
+				- x: x-coordinate
+				- y: y-coordinate
+				- Convert to 0 indexing.
 				- Call Game.RevealTile() and reveal the tile at (x,y) for the
 					player.
+				- Do nothing if the tile was already revealed.
 			
-			FlagMine(int x, int y)
+			FlagMine(int x, int y): "flag"
 				- x: x-coordinate
 				- y: y-coordinate
 				- Mark (x,y) as a mine.
+				- Convert to 0 indexing.
+				- Do nothing if (x,y) is out of bounds or the tile is already
+					flagged.
+				
+			
+			UnflagMine(int x, int y) "unflag"
+				- x: x-coordinate
+				- y: y-coordinate
+				- Convert to 0 indexing.
+				- Remove the flag from (x,y) if one is present.
+				
+				
+		GameOver()
+			- Do end of game output.
 			
 			
 		DisplayBoard()
@@ -289,4 +319,6 @@ public class UI:
 			- This will be provided through a constructor by the code that
 				instantiates the UI object.
 		
+		private bool[][] flags;
+			- Keeps track of tiles the user has flagged.
 		

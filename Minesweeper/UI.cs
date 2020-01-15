@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Minesweeper
@@ -10,11 +10,153 @@ namespace Minesweeper
 	{
 		// Reference to a Game object. Provided by the code that instantiates this.
 		private Game game;
+		// Keeps track of tiles the user has flagged.
+		private bool[][] flags;
 
 		// Constructor
 		public UI(Game game)
 		{
 			this.game = game;
+		}
+
+		/// <summary>
+		/// Parse user input and run valid commands.
+		/// </summary>
+		/// <param name="userInput">User input.</param>
+		public void InterpretCommand(string userInput)
+		{
+			string input = userInput.Trim().ToLower();
+			string commandName = Regex.Match(input, "^.* ").Value;
+
+			switch (commandName)
+			{
+				case "help":
+					break;
+				case "new":
+					break;
+				case "reveal":
+					break;
+				case "flag":
+					break;
+				case "unflag":
+					break;
+				default:
+					// error
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Determine whether a zero-indexed (x,y) is a tile on the gameboard.
+		/// </summary>
+		/// <param name="x">zero-indexed x-coordinate</param>
+		/// <param name="y">zero-indexed y-coordinate</param>
+		/// <returns></returns>
+		private bool IsValid(int x, int y)
+		{
+			return x >= 0 && y >= 0 && x < game.X && y < game.Y;
+		}
+
+
+		/// <summary>
+		/// Parse input and call the command's implementation.
+		/// </summary>
+		/// <param name="input">User input for this command.</param>
+		private void FlagMine(string input)
+		{
+			
+		}
+		/// <summary>
+		/// Flag (x, y) as a mine.
+		/// </summary>
+		/// <param name="x">one-indexed x-coordinate</param>
+		/// <param name="y">one-indexed y-coordinate</param>
+		/// <remarks>If the user enters an invalid tile, just ignore it.</remarks>
+		private void FlagMine(int x, int y)
+		{
+			// Convert to zero-indexing.
+			int realX = x - 1;
+			int realY = y - 1;
+
+			if (IsValid(realX, realY))
+				flags[realX][realY] = true;
+		}
+
+		/// <summary>
+		/// Parse input and call the command's implementation.
+		/// </summary>
+		/// <param name="input">User input for this command.</param>
+		private void UnflagMine(string input)
+		{
+
+		}
+		/// <summary>
+		/// Unflag (x, y).
+		/// </summary>
+		/// <param name="x">one-indexed x-coordinate</param>
+		/// <param name="y">one-indexed y-coordinate</param>
+		/// <remarks>If the user enters an invalid tile, just ignore it.</remarks>
+		private void UnflagMine(int x, int y)
+		{
+			// Convert to zero-indexing.
+			int realX = x - 1;
+			int realY = y - 1;
+		}
+
+		/// <summary>
+		/// Parse input and call the command's implementation.
+		/// </summary>
+		/// <param name="input">User input for this command.</param>
+		private void RevealTile(string input)
+		{
+
+		}
+		/// <summary>
+		/// Flag (x, y) as a mine, if it is a tile.
+		/// </summary>
+		/// <param name="x">one-indexed x-coordinate</param>
+		/// <param name="y">one-indexed y-coordinate</param>
+		/// <remarks>If the user enters an invalid or flagged tile, just ignore it.</remarks>
+		private void RevealTile(int x, int y)
+		{
+			// Convert to zero-indexing.
+			int realX = x - 1;
+			int realY = y - 1;
+		}
+
+		/// <summary>
+		/// Parse input and call the command's implementation.
+		/// </summary>
+		/// <param name="input">User input for this command.</param>
+		private void NewGame(string input)
+		{
+
+		}
+		/// <summary>
+		/// Start a new game.
+		/// </summary>
+		/// <param name="mines">number of mines to put on the board</param>
+		/// <param name="x">horizontal size in tiles</param>
+		/// <param name="y">vertical size in tiles</param>
+		private void NewGame(int mines, int x, int y)
+		{
+
+		}
+
+		/// <summary>
+		/// Parse input and call the command's implementation.
+		/// </summary>
+		/// <param name="input">User input for this command.</param>
+		private void ShowHelp(string input)
+		{
+
+		}
+		/// <summary>
+		/// Display the commands and their explanations.
+		/// </summary>
+		private void ShowHelp()
+		{
+
 		}
 
 		/// <summary>
@@ -49,7 +191,7 @@ namespace Minesweeper
 		///	 10 │   │   │   │   │   │   │   │   │   │   │
 		///		└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
 		/// </remarks>
-		public void DrawBoard(bool lose) //TODO: This should be private.
+		private void DrawBoard(bool lose)
 		{
 			// Number of mines adjacent to the current cell.
 			int adjacentMines;
