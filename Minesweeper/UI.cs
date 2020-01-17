@@ -37,13 +37,16 @@ namespace Minesweeper
 					NewGame(input);
 					break;
 				case "reveal":
-					RevealTile(input);
+					if (CheckRunning())
+						RevealTile(input);
 					break;
 				case "flag":
-					FlagMine(input);
+					if (CheckRunning())
+						FlagMine(input);
 					break;
 				case "unflag":
-					UnflagMine(input);
+					if (CheckRunning())
+						UnflagMine(input);
 					break;
 				default:
 					Console.WriteLine("Command not recognized.");
@@ -52,14 +55,26 @@ namespace Minesweeper
 		}
 
 		/// <summary>
-		/// Determine whether a zero-indexed (x,y) is a tile on the gameboard.
+		/// Check whether the game is still running and output an error message
+		/// if not.
 		/// </summary>
-		/// <param name="x">zero-indexed x-coordinate</param>
-		/// <param name="y">zero-indexed y-coordinate</param>
+		/// <returns><c>true</c> if the game is still running, <c>false</c> otherwise</returns>
+		private bool CheckRunning()
+		{
+			if (!game.InProgress)
+				Console.WriteLine("Please start a new game to begin playing.");
+			return game.InProgress;
+		}
+
+		/// <summary>
+		/// Determine whether a one-indexed (x,y) is a tile on the gameboard.
+		/// </summary>
+		/// <param name="x">one-indexed x-coordinate</param>
+		/// <param name="y">one-indexed y-coordinate</param>
 		/// <returns></returns>
 		private bool IsTile(int x, int y)
 		{
-			return x >= 0 && y >= 0 && x < game.X && y < game.Y;
+			return x >= 1 && y >= 1 && x <= game.X && y <= game.Y;
 		}
 
 		private void DisplayArgumentError()
@@ -74,24 +89,46 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void FlagMine(string input)
 		{
-			// Get the arguments. The calling function has already verified that
-			//	this is the flag command.
+			// One-indexed x and y.
+			int x = 0;
+			int y = 0;
+			GroupCollection arguments = null;
+			bool parsed = false;
 
+			// Capture the two arguments, assuming the command is formatted
+			// like "flag 10 20".
+			arguments = Regex.Match(input, "^\\w+ (\\d+) (\\d+)$").Groups;
+
+			// Apparently, C# defines the first group as the result of the
+			// entire regular expression...
+			parsed = arguments.Count == 3;
+			if (parsed)
+			{
+				parsed = parsed && int.TryParse(arguments[1].Value, out x);
+				parsed = parsed && int.TryParse(arguments[2].Value, out y);
+			}
+
+			if (parsed && IsTile(x, y))
+			{
+				FlagMine(x, y);
+				DrawBoard(false);
+			}
+			else
+				DisplayArgumentError();
 		}
+
 		/// <summary>
 		/// Flag (x, y) as a mine.
 		/// </summary>
 		/// <param name="x">one-indexed x-coordinate</param>
 		/// <param name="y">one-indexed y-coordinate</param>
-		/// <remarks>If the user enters an invalid tile, just ignore it.</remarks>
 		private void FlagMine(int x, int y)
 		{
 			// Convert to zero-indexing.
 			int realX = x - 1;
 			int realY = y - 1;
 
-			if (IsTile(realX, realY))
-				flags[realX][realY] = true;
+			flags[realX][realY] = true;
 		}
 
 		/// <summary>
@@ -100,19 +137,45 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void UnflagMine(string input)
 		{
+			// One-indexed x and y.
+			int x = 0;
+			int y = 0;
+			GroupCollection arguments = null;
+			bool parsed = false;
 
+			// Capture the two arguments, assuming the command is formatted
+			// like "flag 10 20".
+			arguments = Regex.Match(input, "^\\w+ (\\d+) (\\d+)$").Groups;
+
+			// Apparently, C# defines the first group as the result of the
+			// entire regular expression...
+			parsed = arguments.Count == 3;
+			if (parsed)
+			{
+				parsed = parsed && int.TryParse(arguments[1].Value, out x);
+				parsed = parsed && int.TryParse(arguments[2].Value, out y);
+			}
+
+			if (parsed && IsTile(x, y))
+			{
+				UnflagMine(x, y);
+				DrawBoard(false);
+			}
+			else
+				DisplayArgumentError();
 		}
 		/// <summary>
 		/// Unflag (x, y).
 		/// </summary>
 		/// <param name="x">one-indexed x-coordinate</param>
 		/// <param name="y">one-indexed y-coordinate</param>
-		/// <remarks>If the user enters an invalid tile, just ignore it.</remarks>
 		private void UnflagMine(int x, int y)
 		{
 			// Convert to zero-indexing.
 			int realX = x - 1;
 			int realY = y - 1;
+
+			flags[realX][realY] = false;
 		}
 
 		/// <summary>
@@ -121,19 +184,59 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void RevealTile(string input)
 		{
+			// One-indexed x and y.
+			int x = 0;
+			int y = 0;
+			GroupCollection arguments = null;
+			bool parsed = false;
+			bool lose = false;
 
+			// Capture the two arguments, assuming the command is formatted
+			// like "flag 10 20".
+			arguments = Regex.Match(input, "^\\w+ (\\d+) (\\d+)$").Groups;
+
+			// Apparently, C# defines the first group as the result of the
+			// entire regular expression...
+			parsed = arguments.Count == 3;
+			if (parsed)
+			{
+				parsed = parsed && int.TryParse(arguments[1].Value, out x);
+				parsed = parsed && int.TryParse(arguments[2].Value, out y);
+			}
+
+			if (parsed && IsTile(x, y))
+			{
+				RevealTile(x, y);
+				
+				// Check for lose or win condition.
+				lose = !(game.InProgress || game.Win);
+
+				if (!game.InProgress && game.Win)
+					Console.WriteLine("Victory!");
+				else if (lose)
+					Console.WriteLine("You lose!");
+
+				DrawBoard(lose);
+			}
+			else
+				DisplayArgumentError();
 		}
 		/// <summary>
 		/// Flag (x, y) as a mine, if it is a tile.
 		/// </summary>
 		/// <param name="x">one-indexed x-coordinate</param>
 		/// <param name="y">one-indexed y-coordinate</param>
-		/// <remarks>If the user enters an invalid or flagged tile, just ignore it.</remarks>
 		private void RevealTile(int x, int y)
 		{
 			// Convert to zero-indexing.
 			int realX = x - 1;
 			int realY = y - 1;
+			int adjacentMines = 0;
+
+			// If the tile was already revealed, don't attempt to reveal it
+			//	again.
+			if(!game.GetCellInfo(realX, realY, out adjacentMines))
+				game.RevealTile(realX, realY);
 		}
 
 		/// <summary>
@@ -142,10 +245,8 @@ namespace Minesweeper
 		/// <param name="input">User input for this command.</param>
 		private void NewGame(string input)
 		{
-			string strMines = "";
-			string strX = "";
-			string strY = "";
 			int mines = 0;
+			// One-indexed x and y.
 			int x = 0;
 			int y = 0;
 			GroupCollection arguments = null;
@@ -287,6 +388,8 @@ namespace Minesweeper
 						else
 							cellOutput = adjacentMines.ToString();
 					}
+					else if (flags[i - 1][j - 1])
+						cellOutput = "F";
 					else
 						cellOutput = " ";
 					
@@ -356,7 +459,7 @@ namespace Minesweeper
 					Console.BackgroundColor = ConsoleColor.DarkRed;
 					break;
 				// Flag
-				case "#":
+				case "F":
 					Console.ForegroundColor = ConsoleColor.Black;
 					Console.BackgroundColor = ConsoleColor.White;
 					break;

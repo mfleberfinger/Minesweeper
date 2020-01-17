@@ -187,6 +187,12 @@ namespace Minesweeper
 
 			if (HasMine(x, y))
 				GameOver(false);
+			else
+			{
+				hiddenSafeTiles--;
+				if (hiddenSafeTiles == 0)
+					GameOver(true);
+			}
 
 			return result;
 		}
